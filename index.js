@@ -24,10 +24,35 @@ const Duber = async () => {
         const TransportsData = client.db('duber').collection('transports');
         const UsersData = client.db('duber').collection('users');
 
-        app.post('/test', async (req, res) =>{
-            const result = await TransportsData.insertOne({name:'ojit', from:'syleht', to:'dhaka'})
+        app.post('/addtransport', async (req, res) => {
+            const transport = req.body
+            const result = await TransportsData.insertOne(transport)
             res.send(result)
-        })
+        });
+        // add transport api 
+
+        app.get('/alltransport', async (req, res) => {
+            const location = req.query.location;
+            const deis = req.query.destination;
+
+            if (location) {
+                const alltransport = await TransportsData.find({}).toArray();
+                const filterData = alltransport.filter(tra =>
+                    tra.from.toLowerCase().includes(location.toLowerCase()))
+                return res.send(filterData)
+            }
+
+            if (deis) {
+                const alltransport = await TransportsData.find({}).toArray();
+                const filterData = alltransport.filter(tra => tra.destination.toLowerCase().includes(deis.toLowerCase()))
+                return res.send(filterData)
+            }
+
+
+            const alltransport = await TransportsData.find({}).toArray();
+            res.send(alltransport);
+        });
+        // get all product from DB
 
     }
     finally { }
