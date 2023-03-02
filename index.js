@@ -23,9 +23,24 @@ const Duber = async () => {
     try {
         const TransportsData = client.db('duber').collection('transports');
         const UsersData = client.db('duber').collection('users');
+        const transportCollection = client.db("duber").collection("transportDetails")
+        const reviewCollection = client.db("duber").collection("allReview")
 
-        app.post('/test', async (req, res) =>{
-            const result = await TransportsData.insertOne({name:'ojit', from:'syleht', to:'dhaka'})
+        app.post("/add-transport", async (req, res) => {
+            const query = req.body;
+            const result = await transportCollection.insertOne(query)
+            res.send(result)
+        })
+
+        app.get("/all-transports", async (req, res) => {
+            const query = {}
+            const result = await transportCollection.find(query).toArray()
+            res.send(result)
+        })
+
+        app.post("/add-review", async (req, res) => {
+            const query = req.body;
+            const result = await reviewCollection.insertOne(query)
             res.send(result)
         })
 
