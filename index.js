@@ -54,6 +54,13 @@ const Duber = async () => {
         });
         // get all product from DB
 
+        app.post('/adduser', async (req, res) => {
+            const user = req.body;
+            const added = await UsersData.insertOne(user);
+            res.send(added);
+        });
+        // added user to DB 
+
     }
     finally { }
 }
